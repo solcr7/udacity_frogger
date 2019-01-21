@@ -93,7 +93,13 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+        
         player.update();
+
+        allGems.forEach(function(gem) {
+            gem.update();
+        });
+      
     }
 
     /* This function initially draws the "game level", it will then call
@@ -149,12 +155,32 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+        
+        allGems.forEach(function(gem) {
+            gem.render();
+        });
+
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
+        
         player.render();
+
+        if (player.lives > 0 ) {
+            life1.render();
+        }
+
+        if (player.lives > 1) {
+            life2.render();
+        }
+
+        if (player.lives > 2) {
+            life3.render();
+        }
+
     }
+
+
 
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
@@ -174,8 +200,13 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-        'images/char-pink-girl.png'
+        'images/char-pink-girl.png',
+        'images/Gem Blue.png',
+        'images/Gem Green.png',
+        'images/Gem Orange.png',
+        'images/Heart.png'
     ]);
+
     Resources.onReady(init);
 
     /* Assign the canvas' context object to the global variable (the window

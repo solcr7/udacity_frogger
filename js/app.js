@@ -46,6 +46,9 @@ class Player {
     constructor() {
         this.x = 2;
         this.y = 5;
+        this.level = 0;
+        this.score = 0;
+        this.lives = 3;
         this.sprite = 'images/char-pink-girl.png';
     }
 
@@ -83,20 +86,31 @@ Player.prototype.handleInput = function (direction) {
 
 Player.prototype.update = function (dt) {
     for (let enemy of allEnemies) {
-        
+
         if (enemy.y === player.y
             &&
-            (enemy.x  > player.x - 0.8 &&
-                enemy.x < player.x + 0.8 )) {
+            (enemy.x > player.x - 0.8 &&
+                enemy.x < player.x + 0.8)) {
             player.x = 2;
             player.y = 5;
+            player.lives -= 1;
         }
 
-        if (this.y === 0) {
-            console.log("Win");
+        if (player.y === 0) {
+            player.x = 2;
+            player.y = 5;
+            player.level += 1;
+
         }
+
+        /*  if (player.lives == 0) {
+             alert('Game over!')
+         } */
+
     }
+
 };
+
 
 
 
@@ -127,3 +141,86 @@ document.addEventListener('keyup', function (e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+// add Gems as extra Items to collect
+
+let Gem = function (x, y, sprite) {
+    this.x = x;
+    this.y = y;
+    this.sprite = sprite;
+};
+
+Gem.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.x * 101 + 10, this.y * 83 + 25, 80, 101);
+};
+
+function getRandom(array) {
+    const index = Math.floor(Math.random() * array.length);
+    return array[index];
+}
+
+function getRandomX() {
+    return getRandom([0, 1, 2, 3, 4]);
+}
+
+function getRandomY() {
+    return getRandom([1, 2, 3]);
+}
+
+function getRandomGem() {
+    return getRandom(['images/Gem Orange.png', 'images/Gem Blue.png', 'images/Gem Green.png']);
+}
+let allGems = [];
+
+function addGem() {
+    const gem = new Gem(getRandomX(), getRandomY(), getRandomGem());
+    allGems.push(gem);
+
+}
+
+addGem()
+
+Gem.prototype.update = function () {
+    for (let gem of allGems) {
+
+        if (gem.y === player.y
+            &&
+            (gem.x > player.x - 0.8 &&
+                gem.x < player.x + 0.8)) {
+
+            gem.destroy();
+            player.score += 50;
+            console.log(player.score)
+
+            addGem()
+
+        }
+    }
+}
+
+Gem.prototype.destroy = function () {
+
+    const index = allGems.indexOf(this)
+
+    if (index > -1) {
+        allGems.splice(index, 1)
+    }
+
+
+}
+
+// add lives
+
+let Life = function (x, y) {
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/Heart.png';
+};
+
+Life.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.x * 101 + 10, this.y * 83 + 25, 80, 101);
+};
+
+const life1 = new Life(0, 0);
+const life2 = new Life(1, 0);
+const life3 = new Life(2, 0);
