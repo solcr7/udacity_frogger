@@ -34,11 +34,11 @@ Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83 - 20);
 };
 
-const enemyOne = new Enemy(-1, 1, 5);
-const enemyTwo = new Enemy(-1, 2, 2);
-const enemyThree = new Enemy(-1, 3, 1);
-const allEnemies = [];
-allEnemies.push(enemyOne, enemyTwo, enemyThree);
+
+
+let allEnemies = [];
+
+
 
 
 
@@ -57,7 +57,7 @@ class Player {
         ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83 - 10);
     }
 }
-const player = new Player();
+let player = null;
 
 Player.prototype.handleInput = function (direction) {
     switch (direction) {
@@ -96,19 +96,15 @@ Player.prototype.update = function (dt) {
             player.lives -= 1;
         }
 
-        if (player.y === 0) {
-            player.x = 2;
-            player.y = 5;
-            player.level += 1;
-
-        }
-
-        /*  if (player.lives == 0) {
-             alert('Game over!')
-         } */
-
     }
 
+    if (player.y === 0) {
+        player.x = 2;
+        player.y = 5;
+        player.level += 1;
+    }
+
+    
 };
 
 
@@ -178,7 +174,7 @@ function addGem() {
 
 }
 
-addGem()
+
 
 Gem.prototype.update = function () {
     for (let gem of allGems) {

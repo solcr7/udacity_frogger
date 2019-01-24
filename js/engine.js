@@ -80,6 +80,11 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         // checkCollisions();
+        if (player.lives < 1) {
+            document.getElementById('repeat_modal').classList.add('active');
+            console.log('pups');
+            reset();
+        }
     }
 
     /* This is called by the update function and loops through all of the
@@ -90,6 +95,7 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
+
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
@@ -99,8 +105,9 @@ var Engine = (function(global) {
         allGems.forEach(function(gem) {
             gem.update();
         });
-      
     }
+
+
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -187,6 +194,17 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
+        
+        allEnemies = [];
+        const enemyOne = new Enemy(-1, 1, 5);
+        const enemyTwo = new Enemy(-1, 2, 2);
+        const enemyThree = new Enemy(-1, 3, 1);
+        allEnemies.push(enemyOne, enemyTwo, enemyThree);
+                
+        allGems = [];
+        addGem()
+
+        player = new Player();
         // noop
     }
 
