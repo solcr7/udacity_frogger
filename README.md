@@ -25,7 +25,7 @@
 
 ## Project Specifications:
 
-In order to pass the project you have to meet the following specifications:
+In order to pass the project I have to meet the following specifications:
 
 ### Error free code
 * The game functions correctly and runs error free
