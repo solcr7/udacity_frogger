@@ -3,10 +3,16 @@
 ## Table of Contents
 
 * [Instructions](#instructions)
+* [How to play](#how-to-play)
 * [Project Specifications](#project-specifications)
 
 ## Instructions:
+* Clone or download the repository.
+* Open the zip.file on your computer.
+* Extract the files.
+* Open index.html in a browser of your choice and start playing.
 
+## How to play:
 * Move the player using the arrow keys.
 * Try to reach the water without colliding with one of the enemies. Every time you reach the water, you will 
   gain 25 points and your player will be reset to the starting line for a new round.
