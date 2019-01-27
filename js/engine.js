@@ -13,7 +13,7 @@
  * writing app.js a little simpler to work with.
  */
 
-var Engine = (function(global) {
+var Engine = (function (global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas element's height/width and add it to the DOM.
@@ -22,7 +22,8 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,
+        stopGame = false;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -44,8 +45,12 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-        update(dt);
-        render();
+
+        if (stopGame === false) {
+            update(dt);
+            render();
+        }
+
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -80,10 +85,10 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         // checkCollisions();
-        if (player.lives < 1) {
-            document.getElementById('repeat_modal').classList.add('active');
-            console.log('pups');
-            reset();
+
+        if (player.isDead()) {
+            RepeatModal.open();
+            stop();
         }
     }
 
@@ -96,18 +101,16 @@ var Engine = (function(global) {
      */
     function updateEntities(dt) {
 
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function (enemy) {
             enemy.update(dt);
         });
-        
+
         player.update();
 
-        allGems.forEach(function(gem) {
+        allGems.forEach(function (gem) {
             gem.update();
         });
     }
-
-
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -120,19 +123,19 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
+            'images/water-block.png',   // Top row is water
+            'images/stone-block.png',   // Row 1 of 3 of stone
+            'images/stone-block.png',   // Row 2 of 3 of stone
+            'images/stone-block.png',   // Row 3 of 3 of stone
+            'images/grass-block.png',   // Row 1 of 2 of grass
+            'images/grass-block.png'    // Row 2 of 2 of grass
+        ],
             numRows = 6,
             numCols = 5,
             row, col;
 
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -162,18 +165,18 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        
-        allGems.forEach(function(gem) {
+
+        allGems.forEach(function (gem) {
             gem.render();
         });
 
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function (enemy) {
             enemy.render();
         });
-        
+
         player.render();
 
-        if (player.lives > 0 ) {
+        if (player.lives > 0) {
             life1.render();
         }
 
@@ -187,25 +190,32 @@ var Engine = (function(global) {
 
     }
 
-
-
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
+
     function reset() {
-        
+
         allEnemies = [];
         const enemyOne = new Enemy(-1, 1, 5);
-        const enemyTwo = new Enemy(-1, 2, 2);
-        const enemyThree = new Enemy(-1, 3, 1);
+        const enemyTwo = new Enemy(-1, 2, 3);
+        const enemyThree = new Enemy(-1, 3, 2);
         allEnemies.push(enemyOne, enemyTwo, enemyThree);
-                
+
         allGems = [];
         addGem()
 
         player = new Player();
         // noop
+    }
+
+    function stop() {
+        stopGame = true;
+    }
+
+    function resume() {
+        stopGame = false
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -232,4 +242,31 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+
+    const RepeatModal = (function (global) {
+
+        const open = function () {
+            document.getElementById('repeat_modal').classList.add('active');
+        }
+
+        const close = function () {
+            document.getElementById('repeat_modal').classList.remove('active');
+        }
+
+        const repeat = function () {
+            reset();
+            resume();
+            close();
+        }
+
+        document.getElementById('repeat_modal_close').addEventListener('click', repeat);
+        document.getElementById('repeat_modal_again').addEventListener('click', repeat);
+
+        return {
+            open: open
+        }
+
+    })(this);
+
+
 })(this);
