@@ -21,7 +21,7 @@ Project # 3 for my Udacity Frontend Nanodegree
   Every time a new round begins, a new gem will be appear on the field.
 * You begin with a total of 3 lives. Every time you collide with an enemy you will lose one life and your player
   will be reset to the starting line. 
-* Once you have lost all three lines, the game is over. 
+* Once you have lost all three lives, the game is over. 
 
 
 ## Project Specifications:
