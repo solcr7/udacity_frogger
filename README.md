@@ -1,4 +1,5 @@
 # Classic Arcade Game Clone Project
+Project # 3 for my Udacity Frontend Nanodegree
 
 ## Table of Contents
 
