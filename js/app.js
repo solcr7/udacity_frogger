@@ -80,21 +80,21 @@ class Player {
         //if player collides with enemy
         for (let enemy of allEnemies) {
 
-            if (enemy.y === player.y
+            if (enemy.y === this.y
                 &&
-                (enemy.x > player.x - 0.8 &&
-                    enemy.x < player.x + 0.8)) {
-                player.x = 2;
-                player.y = 5;
-                player.lives -= 1;
+                (enemy.x > this.x - 0.8 &&
+                    enemy.x < this.x + 0.8)) {
+                this.x = 2;
+                this.y = 5;
+                this.lives -= 1;
             }
 
         }
         //if player gets to the water
-        if (player.y === 0) {
-            player.x = 2;
-            player.y = 5;
-            player.score += 25;
+        if (this.y === 0) {
+            this.x = 2;
+            this.y = 5;
+            this.score += 25;
         }
 
     }
